@@ -1,0 +1,16 @@
+dp ADDER(
+	in a : tc(32);
+	in b : tc(32);
+	out add_out : tc(32)
+	){
+	reg r1 : tc(32);
+	reg r2 : tc(32);
+
+	always{	
+		$display($dec, "Cycle: ",$cycle); //note : fordebugging
+		$display($dec, "add_out: ",add_out); //note : fordebugging
+		r1 = a;
+		r2 = b;
+		add_out = r1+r2;
+	}
+}
