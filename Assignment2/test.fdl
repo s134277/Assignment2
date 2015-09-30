@@ -1,0 +1,4 @@
+reg a : ns(3);
+sfg run {
+ a = a + 1;
+} 

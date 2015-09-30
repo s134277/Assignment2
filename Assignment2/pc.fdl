@@ -1,0 +1,20 @@
+$option "vcd"
+dp PC(out pc_out : ns(5))
+{
+	reg r1 : ns(5);
+	$trace(pc_out,"/home/feynman/Assignment2/filename.txt");
+	always{
+		
+		//$display($dec, "Cycle: ",$cycle); //note : fordebugging
+		//$display($dec, "pc_out: ",pc_out); //note : fordebugging
+
+		
+		r1 = r1 + 1;
+		pc_out = r1;
+	}
+}
+
+system PCsystem
+{
+	PC(pc_out);
+}

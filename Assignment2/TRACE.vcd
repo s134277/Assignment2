@@ -1,0 +1,21 @@
+$var reg 	5 !	PC.pc_out  $end
+$enddefinitions $end 
+$enddefinitions $end 
+#2
+b00001 !
+#3
+b00010 !
+#4
+b00011 !
+#5
+b00100 !
+#6
+b00101 !
+#7
+b00110 !
+#8
+b00111 !
+#9
+b01000 !
+#10
+b01001 !
