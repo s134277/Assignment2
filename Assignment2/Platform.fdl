@@ -168,7 +168,8 @@ always{
   stall = (M_dataoutrdy == 0 & (OP == 0b0101 | OP == 0b0110)) ? 1 : 0;
 
   pc_s = (OP == 0b0111) ? 1 : 
-    (OP == 0b0100 & aluneg == 1) ? 1 : 0;
+    (OP == 0b0100 & aluneg == 1) ? 1 :
+	(OP == 0b1100 & aluzero == 1) ? 1 : 0;
 
 	alusel = (OP == 0b0000) ? 0b111 : 
 		(OP == 0b0001) ? 0b100 :
