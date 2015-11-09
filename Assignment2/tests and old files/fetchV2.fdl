@@ -1,0 +1,82 @@
+dp PC(out pc_out : ns(5);
+	in select : ns(1);
+	in jump_target : ns(5)
+){
+	reg r1 : ns(5);
+	always{
+		r1 = (select == 1) ? jump_target : (r1+1);
+		pc_out = r1;
+	}
+}
+
+ipblock instmem(in address : ns(5);
+	in wr,rd : ns(1);
+	in idata : ns(32);
+	out odata : ns(32)
+	){
+	iptype "ram";
+	ipparm "size=64";
+	ipparm "wl=32";
+	ipparm "file=program.txt";
+	}
+
+
+
+
+dp CPU (out do : ns(32);
+	in pc_sel : ns(1);
+	in pc_jump : ns(5)
+	){
+	sig pc : ns(5);
+	sig pc_s : ns(1);
+	sig pc_j : ns(5);
+	reg di : ns(32);
+	sig wr, rd : ns(1);
+
+	use PC(pc,pc_s,pc_j);
+	use instmem(pc, wr, rd, di, do);
+	
+always{	
+	pc_s = pc_sel;
+	pc_j = pc_jump;
+	wr = 0;
+	rd = 1;
+	
+	}
+}
+
+
+
+dp testCPU(in do : ns(32);
+	out pc_sel : ns(1);
+	out pc_jump : ns(5)
+){
+always{
+ 	$display($dec, "Cycle:", $cycle, ", do=", do);
+	}
+
+sfg test_0 { pc_sel=0;pc_jump=0; }
+sfg test_1 { pc_sel=0;pc_jump=0; }
+sfg test_2 { pc_sel=0;pc_jump=0; }
+sfg test_3 { pc_sel=1;pc_jump=1; }
+sfg test_4 { pc_sel=0;pc_jump=0; }
+
+}
+
+fsm f_testbench(testCPU)
+{
+initial s0; // begin with state s0
+state s1, s2, s3, s4;
+@s0 (test_0) -> s1; // run test_0 and go to s1
+@s1 (test_1) -> s2; // run test_1 and go to s2
+@s2 (test_2) -> s3; // run test_2 and go to s3
+@s3 (test_3) -> s4; // run test_3 and go to s4
+@s4 (test_4) -> s0; // run test_4 and go to s0
+
+
+}
+
+system S {
+	CPU(do,pc_sel,pc_jump);
+	testCPU(do,pc_sel,pc_jump);
+	}

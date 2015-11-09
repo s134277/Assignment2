@@ -1,0 +1,58 @@
+dp PC(out pc_out : ns(5)
+){
+	reg r1 : ns(5);
+	always{
+		r1 = r1 + 1;
+		pc_out = r1;
+	}
+}
+
+ipblock instmem(in address : ns(5);
+	in wr,rd : ns(1);
+	in idata : ns(32);
+	out odata : ns(32)
+	){
+	iptype "ram";
+	ipparm "size=64";
+	ipparm "wl=32";
+	ipparm "file=program.txt";
+	}
+
+
+dp CPU (out do : ns(32)){
+	sig pc : ns(5);
+	reg di : ns(32);
+	sig wr, rd : ns(1);
+	use PC(pc);
+
+	use instmem(pc, wr, rd, di, do);
+	always{
+		wr = 0;
+		rd = 1;
+	}
+}
+
+
+
+dp testCPU(
+in do : ns(32)
+){
+always{
+ $display($dec, "Cycle:", $cycle, ", do=", do);
+ }
+
+sfg test_0 { }
+
+}
+
+fsm f_testbench(testCPU)
+{
+initial s0; // begin with state s0
+@s0 (test_0) -> s0; // run test_0 and go to s0
+
+}
+
+system S {
+	CPU(do);
+	testCPU(do);
+	}

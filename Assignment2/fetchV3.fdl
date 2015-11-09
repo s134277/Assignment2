@@ -1,0 +1,201 @@
+dp PC(out pc_out : ns(5);
+	in select : ns(1);
+	in jump_target : ns(5)
+){
+	reg r1 : ns(5);
+	always{
+		r1 = (select == 1) ? jump_target : (r1+1);
+		pc_out = r1;
+	}
+}
+
+dp ALUMUX(
+	in a : tc(32);
+	in b : tc(32);
+	in select : ns(1);	
+	out r : tc(32)
+	)	
+	{
+//reg r1 : tc(32); this line should be removed
+	always{	
+	r = (select == 1) ? a : b;		
+	}
+}
+
+ipblock instmem(in address : ns(5);
+	in wr,rd : ns(1);
+	in idata : ns(32);
+	out odata : ns(32)
+	){
+	iptype "ram";
+	ipparm "size=64";
+	ipparm "wl=32";
+	ipparm "file=program.txt";
+	}
+
+dp register(
+	in asel : ns(3);
+	in bsel : ns(3);
+	in storeenable : ns(1);	
+	in storesel : ns(3);
+	in storedata : tc(32);
+	out a : tc(32);
+	out b : tc(32)
+	){
+	reg r0 : tc(32);
+	reg r1 : tc(32);
+	reg r2 : tc(32);
+	reg r3 : tc(32);
+	reg r4 : tc(32);
+	reg r5 : tc(32);
+	reg r6 : tc(32);
+	reg r7 : tc(32);
+	
+	always{	
+	r1 = (storeenable == 1) ? ((storesel == 0b001) ? storedata : r1) : r1;
+	r2 = (storeenable == 1) ? ((storesel == 0b010) ? storedata : r2) : r2;
+	r3 = (storeenable == 1) ? ((storesel == 0b011) ? storedata : r3) : r3;
+	r4 = (storeenable == 1) ? ((storesel == 0b100) ? storedata : r4) : r4;
+	r5 = (storeenable == 1) ? ((storesel == 0b101) ? storedata : r5) : r5;
+	r6 = (storeenable == 1) ? ((storesel == 0b110) ? storedata : r6) : r6;
+	r7 = (storeenable == 1) ? ((storesel == 0b111) ? storedata : r7) : r7;
+	
+	a = (asel == 0b000) ? 0 :
+	(asel == 0b001) ? r1 :
+	(asel == 0b010) ? r2 :
+	(asel == 0b011) ? r3 :
+	(asel == 0b100) ? r4 :
+	(asel == 0b101) ? r5 :
+	(asel == 0b110) ? r6 : r7;
+
+	b = (bsel == 0b000) ? 0 :
+	(bsel == 0b001) ? r1 :
+	(bsel == 0b010) ? r2 :
+	(bsel == 0b011) ? r3 :
+	(bsel == 0b100) ? r4 :
+	(bsel == 0b101) ? r5 :
+	(bsel == 0b110) ? r6 : r7;
+
+	}
+}
+
+dp alu(
+	in a : tc(32);
+	in b : tc(32);
+	in select : ns(3);	
+	out r : tc(32);
+	out n : ns(1);
+	out z : ns(1)
+	)	
+	{
+	always{	
+	r = (select == 0b000) ? (a-b) :
+	(select == 0b001) ? (b-a) :
+	(select == 0b010) ? a :
+	(select == 0b011) ? b :
+	(select == 0b100) ? (a+b) :
+	(select == 0b101) ? (a*b) : 0; 
+	
+
+	n = r[31];
+	z = r ? 0:1;
+	
+	}
+}
+
+dp CPU (out do : ns(32);
+	out result : tc(32);
+	out reg1,reg2 : tc(32);
+	out se : ns(1); 
+	out ss : ns(3)
+	){
+	sig pc : ns(5);
+	sig pc_s : ns(1);
+	sig pc_j : ns(5);
+	reg di : ns(32);
+	sig wr, rd : ns(1);
+	sig asel,bsel,storesel,alusel : ns(3);
+	sig storedata,regouta, regoutb, alumuxout,aluout : tc(32);
+	sig storeenable, alumuxsel, aluneg, aluzero : ns(1);	
+	sig immediate : ns(19);
+	sig OP : ns(4);
+
+	use PC(pc,pc_s,pc_j);
+	use instmem(pc, wr, rd, di, do);
+	use register(asel,bsel,storeenable,storesel,aluout,regouta,regoutb);
+	use ALUMUX(immediate,regouta,alumuxsel,alumuxout);
+	use alu(alumuxout,regoutb, alusel, aluout, aluneg, aluzero);
+always{	
+	asel = do[22:24];
+	bsel = do[19:21];
+	storesel = do[25:27];
+	immediate = do[0:18];
+	pc_j = do[0:4];
+	wr = 0;
+	rd = 1;
+	result = aluout;
+	reg1 = regouta;
+	reg2 = regoutb;
+	se = storeenable;
+	ss = storesel;
+	
+	OP = do[28:31];
+	
+	pc_s = (OP == 0b0111) ? 1 : 
+		(OP == 0b0100 & aluneg == 1) ? 1 : 0;
+
+	alusel = (OP == 0b0000) ? 0b111 : 
+		(OP == 0b0001) ? 0b100 :
+		(OP == 0b1001) ? 0b000 :
+		(OP == 0b0010) ? 0b100 :
+		(OP == 0b0111) ? 0b111 : 0b010;
+
+	alumuxsel = (OP == 0b0010) ? 1 : 0;
+
+	storeenable = (OP == 0b0001) ? 1 :
+			(OP == 0b1001) ? 1 :
+			(OP == 0b0010) ? 1 :
+			(OP == 0b0101) ? 1 : 0;
+
+
+	
+	}
+}
+
+
+
+dp testCPU(in do : ns(32);
+	in result : tc(32);
+	in reg1,reg2 : tc(32);
+	in storeenable : ns(1); 
+	in storesel : ns(3)
+){
+always{
+ 	$display($dec, "Cycle:", $cycle, ", do=", do, ", result=", result, " , outA=",reg1," ,outB=",reg2,", se=",storeenable,", ss=",storesel);
+	}
+
+sfg test_0 { }
+sfg test_1 { }
+sfg test_2 { }
+sfg test_3 { }
+sfg test_4 { }
+
+}
+
+fsm f_testbench(testCPU)
+{
+initial s0; // begin with state s0
+state s1, s2, s3, s4;
+@s0 (test_0) -> s1; // run test_0 and go to s1
+@s1 (test_1) -> s2; // run test_1 and go to s2
+@s2 (test_2) -> s3; // run test_2 and go to s3
+@s3 (test_3) -> s4; // run test_3 and go to s4
+@s4 (test_4) -> s0; // run test_4 and go to s0
+
+
+}
+
+system S {
+	CPU(do,result,reg1,reg2,storeenable,storesel);
+	testCPU(do,result,reg1,reg2,storeenable,storesel);
+	}

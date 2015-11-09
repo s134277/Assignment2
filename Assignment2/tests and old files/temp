@@ -1,0 +1,24 @@
+	(storeenable == 0) ? (r0 = 0) :	
+	(storesel == 0b000) ? (r0 = 0) :
+	(storesel == 0b001) ? (r1 = storedata) :
+	(storesel == 0b010) ? (r2 = storedata) :
+	(storesel == 0b011) ? (r3 = storedata) :
+	(storesel == 0b100) ? (r4 = storedata) :
+	(storesel == 0b101) ? (r5 = storedata) :
+	(storesel == 0b110) ? (r6 = storedata) : (r7 = storedata);
+	
+	b = (asel == 0b000) ? 0 :
+	(asel == 0b001) ? r1 :
+	(asel == 0b010) ? r2 :
+	(asel == 0b011) ? r3 :
+	(asel == 0b100) ? r4 :
+	(asel == 0b101) ? r5 :
+	(asel == 0b110) ? r6 : r7;
+
+	a = (bsel == 0b000) ? 0 :
+	(bsel == 0b001) ? r1 :
+	(bsel == 0b010) ? r2 :
+	(bsel == 0b011) ? r3 :
+	(bsel == 0b100) ? r4 :
+	(bsel == 0b101) ? r5 :
+	(bsel == 0b110) ? r6 : r7;
