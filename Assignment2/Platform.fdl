@@ -7,9 +7,11 @@ dp PC(out pc_out : ns(5);
 	){
 	reg r1 : ns(5);
 	always{
-		r1 = (select == 1 & stall == 0) ? jump_target : 
-    (select == 0 & stall == 1) ? r1 : (r1+1);
-		pc_out = r1;
+		r1 = (select == 1) ? jump_target : 
+			(select == 0) ? r1+1 : r1+1;
+		
+		pc_out = (stall) ? r1-1: r1;
+		//pc_out = r1;
 	}
 }
 
@@ -152,6 +154,7 @@ dp CPU(
 
   $trace(M_dataout, "traces/M_dataout.seq");
   $trace(M_dataoutrdy, "traces/M_dataoutrdy.seq");
+  $trace(stall, "traces/stall.seq");
 
 always{	
 	asel = do[24:22];
@@ -168,8 +171,8 @@ always{
   stall = (M_dataoutrdy == 0 & (OP == 0b0101 | OP == 0b0110)) ? 1 : 0;
 
   pc_s = (OP == 0b0111) ? 1 : 
-    (OP == 0b0100 & aluneg == 1) ? 1 :
-	(OP == 0b1100 & aluzero == 1) ? 1 : 0;
+    	(OP == 0b0100 & aluneg == 1) ? 1 :
+		(OP == 0b1100 & aluzero == 1) ? 1 : 0;
 
 	alusel = (OP == 0b0000) ? 0b111 : 
 		(OP == 0b0001) ? 0b100 :
