@@ -1,4 +1,8 @@
-$option "vcd"
+//$option "vcd"
+$option "profile_toggle_alledge"
+$option "profile_toggle_upedge"
+$option "profile_display_operations"
+$option "profile_display_cycles"
 
 dp PC(out pc_out : ns(5);
 	in select : ns(1);
@@ -7,11 +11,13 @@ dp PC(out pc_out : ns(5);
 	){
 	reg r1 : ns(5);
 	always{
-		r1 = (select == 1) ? jump_target : 
-			(select == 0) ? r1+1 : r1+1;
-		
-		pc_out = (stall) ? r1-1: r1;
-		//pc_out = r1;
+//$display($dec, "pc_out:", pc_out);
+r1 = (select == 1 & stall == 0) ? jump_target : 
+    (select == 0 & stall == 1) ? r1 : (r1+1);
+
+pc_out = (select == 1 & stall == 0) ? jump_target : 
+    (select == 0 & stall == 1) ? r1 : (r1+1);
+
 	}
 }
 
@@ -67,7 +73,9 @@ dp register(
 	reg r6 : tc(32);
 	reg r7 : tc(32);
 	
-	always{	
+	always{
+	//$display($dec,"cycles: ",$cycle);	
+	//$display($dec,"cycles: ", $cycle, " stored 		//value : ", r1," reg2: ", r2," r6: ", r6 ," reg7: ",r7);
 	r1 = (storeenable == 1) ? ((storesel == 0b001) ? storedata : r1) : r1;
 	r2 = (storeenable == 1) ? ((storesel == 0b010) ? storedata : r2) : r2;
 	r3 = (storeenable == 1) ? ((storesel == 0b011) ? storedata : r3) : r3;
@@ -122,7 +130,6 @@ dp alu(
 ////////////////////////////
 // CPU
 ////////////////////////////
-
 dp CPU(
     out M_datain : ns(32);		//data from Master (CPU) to bus
     out M_cmd : ns(32);			//OP-code from Master to bus
@@ -152,12 +159,14 @@ dp CPU(
 	use WBMUX(loadeddata,aluout,memstoreenable,WB);
 	use alu(alumuxout,regoutb, alusel, aluout, aluneg, aluzero);
 
-  $trace(M_dataout, "traces/M_dataout.seq");
-  $trace(M_dataoutrdy, "traces/M_dataoutrdy.seq");
-  $trace(stall, "traces/stall.seq");
+  //$trace(M_dataout, "traces/M_dataout.seq");
+  //$trace(M_dataoutrdy, "traces/M_dataoutrdy.seq");
 
+	
 always{	
-	asel = do[24:22];
+	//$display($dec, "data out cpu:", M_datainrdy);	
+	//$display("Cycle ", $cycle, " Toggle ", $toggle, " asel ", asel);
+asel = do[24:22];
 	bsel = do[21:19];
 	storesel = do[27:25];
 	immediate = do[18:0];
@@ -171,8 +180,8 @@ always{
   stall = (M_dataoutrdy == 0 & (OP == 0b0101 | OP == 0b0110)) ? 1 : 0;
 
   pc_s = (OP == 0b0111) ? 1 : 
-    	(OP == 0b0100 & aluneg == 1) ? 1 :
-		(OP == 0b1100 & aluzero == 1) ? 1 : 0;
+    (OP == 0b0100 & aluneg == 1) ? 1 :
+	(OP == 0b1100 & aluzero == 1) ? 1 : 0;
 
 	alusel = (OP == 0b0000) ? 0b111 : 
 		(OP == 0b0001) ? 0b100 :
@@ -251,36 +260,36 @@ dp bus(
 		
         ){
         
-        $trace(reqDataMem, "traces/reqDataMem.seq");
-        $trace(cmdDataMem, "traces/cmdDataMem.seq");
-        $trace(datainDataMem, "traces/datainDataMem.seq");
-        $trace(ackDataMem, "traces/ackDataMem.seq");
-        $trace(dataRdyDataMem, "traces/dataRdyDataMem.seq");
-        $trace(dataoutDataMem, "traces/dataoutDataMem.seq");
-        $trace(waitDataMem, "traces/waitDataMem.seq");
+       // $trace(reqDataMem, "traces/reqDataMem.seq");
+        //$trace(cmdDataMem, "traces/cmdDataMem.seq");
+        //$trace(datainDataMem, "traces/datainDataMem.seq");
+        //$trace(ackDataMem, "traces/ackDataMem.seq");
+        //$trace(dataRdyDataMem, "traces/dataRdyDataMem.seq");
+        //$trace(dataoutDataMem, "traces/dataoutDataMem.seq");
+        //$trace(waitDataMem, "traces/waitDataMem.seq");
         
-        $trace(reqSensor, "traces/reqSensor.seq");
-        $trace(cmdSensor, "traces/cmdSensor.seq");
-        $trace(ackSensor, "traces/ackSensor.seq");
-        $trace(dataRdySensor, "traces/dataRdySensor.seq");
-        $trace(dataoutSensor, "traces/dataoutSensor.seq");
-        $trace(waitSensor, "traces/waitSensor.seq");
+        //$trace(reqSensor, "traces/reqSensor.seq");
+        //$trace(cmdSensor, "traces/cmdSensor.seq");
+        //$trace(ackSensor, "traces/ackSensor.seq");
+        //$trace(dataRdySensor, "traces/dataRdySensor.seq");
+        //$trace(dataoutSensor, "traces/dataoutSensor.seq");
+        //$trace(waitSensor, "traces/waitSensor.seq");
         
-        $trace(reqOutput, "traces/reqOutput.seq");
-        $trace(cmdOutput, "traces/cmdOutput.seq");
-        $trace(datainOutput, "traces/datainOutput.seq");
-        $trace(ackOutput, "traces/ackOutput.seq");
-        $trace(dataRdyOutput, "traces/dataRdyOutput.seq");
-        $trace(dataoutOutput, "traces/dataoutOutput.seq");
-        $trace(waitOutput, "traces/waitOutput.seq");
+        //$trace(reqOutput, "traces/reqOutput.seq");
+        //$trace(cmdOutput, "traces/cmdOutput.seq");
+        //$trace(datainOutput, "traces/datainOutput.seq");
+        //$trace(ackOutput, "traces/ackOutput.seq");
+        //$trace(dataRdyOutput, "traces/dataRdyOutput.seq");
+        //$trace(dataoutOutput, "traces/dataoutOutput.seq");
+        //$trace(waitOutput, "traces/waitOutput.seq");
         
-        $trace(reqCPU, "traces/reqCPU.seq");
-        $trace(cmdCPU, "traces/cmdCPU.seq");
-        $trace(dataoutCPU, "traces/dataoutCPU.seq");
-        $trace(ackCPU, "traces/ackCPU.seq");
-        $trace(dataRdyCPU, "traces/dataRdyCPU.seq");
-        $trace(datainCPU, "traces/datainCPU.seq");
-        $trace(waitCPU, "traces/waitCPU.seq");
+       // $trace(reqCPU, "traces/reqCPU.seq");
+       // $trace(cmdCPU, "traces/cmdCPU.seq");
+       // $trace(dataoutCPU, "traces/dataoutCPU.seq");
+       // $trace(ackCPU, "traces/ackCPU.seq");
+       // $trace(dataRdyCPU, "traces/dataRdyCPU.seq");
+       // $trace(datainCPU, "traces/datainCPU.seq");
+       // $trace(waitCPU, "traces/waitCPU.seq");
         
         always{
           ackCPU = (cmdCPU[28:31] == ID_DataMem & ackDataMem) | (cmdCPU[28:31] == ID_Sensor & ackSensor) | (cmdCPU[28:31] == ID_Output & ackOutput); // "OR" all slaves ack signals here
@@ -570,23 +579,23 @@ dp bus_toplevel(
            reg ID_Sensor : ns(4);
            reg ID_Output : ns(4);
            
-           $trace(DM_datain, "traces/DM_datain.seq");
-           $trace(DM_datainrdy, "traces/DM_datainrdy.seq");
-           $trace(DM_dataout, "traces/DM_dataout.seq");
-           $trace(DM_cmdout, "traces/DM_cmdout.seq");
-           $trace(DM_dataoutrdy, "traces/DM_dataoutrdy.seq");
+         //  $trace(DM_datain, "traces/DM_datain.seq");
+          // $trace(DM_datainrdy, "traces/DM_datainrdy.seq");
+          // $trace(DM_dataout, "traces/DM_dataout.seq");
+           //$trace(DM_cmdout, "traces/DM_cmdout.seq");
+           //$trace(DM_dataoutrdy, "traces/DM_dataoutrdy.seq");
            
-           $trace(SS_datain, "traces/SS_datain.seq");
-           $trace(SS_datainrdy, "traces/SS_datainrdy.seq");
-           $trace(SS_dataout, "traces/SS_dataout.seq");
-           $trace(SS_cmdout, "traces/SS_cmdout.seq");
-           $trace(SS_dataoutrdy, "traces/SS_dataoutrdy.seq");
+           //$trace(SS_datain, "traces/SS_datain.seq");
+           //$trace(SS_datainrdy, "traces/SS_datainrdy.seq");
+           //$trace(SS_dataout, "traces/SS_dataout.seq");
+           //$trace(SS_cmdout, "traces/SS_cmdout.seq");
+           //$trace(SS_dataoutrdy, "traces/SS_dataoutrdy.seq");
            
-           $trace(OP_datain, "traces/OP_datain.seq");
-           $trace(OP_datainrdy, "traces/OP_datainrdy.seq");
-           $trace(OP_dataout, "traces/OP_dataout.seq");
-           $trace(OP_cmdout, "traces/OP_cmdout.seq");
-           $trace(OP_dataoutrdy, "traces/OP_dataoutrdy.seq");
+           //$trace(OP_datain, "traces/OP_datain.seq");
+           //$trace(OP_datainrdy, "traces/OP_datainrdy.seq");
+           //$trace(OP_dataout, "traces/OP_dataout.seq");
+           //$trace(OP_cmdout, "traces/OP_cmdout.seq");
+           //$trace(OP_dataoutrdy, "traces/OP_dataoutrdy.seq");
            
            use bus(reqCPU,cmdCPU,dataoutCPU,ackCPU,dataRdyCPU,datainCPU,waitCPU, // master
                    reqDataMem,cmdDataMem,datainDataMem,ackDataMem,dataRdyDataMem,dataoutDataMem,waitDataMem, // Data memory (slave)
@@ -653,10 +662,10 @@ dp DataMem(
    
    use datamem(address,wr,rd,idata,dataout);
    
-   $trace(address, "traces/DM_address.seq");
-   $trace(wr, "traces/DM_wr.seq");
-   $trace(rd, "traces/DM_rd.seq");
-   $trace(idata, "traces/DM_idata.seq");
+   //$trace(address, "traces/DM_address.seq");
+   //$trace(wr, "traces/DM_wr.seq");
+   //$trace(rd, "traces/DM_rd.seq");
+   //$trace(idata, "traces/DM_idata.seq");
    
    always{
        stallr = stall;
@@ -736,8 +745,8 @@ dp Sensor(
    	reg stallr : ns(1);
    	reg datainrdyr : ns(1);
    	
-   	$trace(odata, "traces/SS_data.seq");
-   	$trace(c, "traces/SS_c.seq");
+   //	$trace(odata, "traces/SS_data.seq");
+  // 	$trace(c, "traces/SS_c.seq");
    	
    	always{
    		wr = 0;
@@ -819,8 +828,8 @@ dp Output(
    reg count : ns(10);
    reg FilterOut_r : tc(32);
    
-   $trace(FilterOut, "traces/FilterOut.seq");
-   $trace(count, "traces/out_count.seq");
+  // $trace(FilterOut, "traces/FilterOut.seq");
+   //$trace(count, "traces/out_count.seq");
    
    always{
        stallr = stall;
