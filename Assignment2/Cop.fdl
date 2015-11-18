@@ -2,7 +2,6 @@ dp register(
 	in storeenaable : ns(1);	
 	in storesel : ns(5);
 	in storedata : tc(32);
-	out flush : tc(32);
 	out o1 : tc(32);
 	out o2 : tc(32);
 	out o3 : tc(32);
@@ -72,38 +71,71 @@ reg r31 : tc(32);
 reg r32 : tc(32);
 
 always{
-	r1 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r1) : r1;
-	r2 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r2) : r2;
-	r3 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r3) : r3;
-	r4 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r4) : r4;
-	r5 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r5) : r5;
-	r6 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r6) : r6;
-	r7 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r7) : r7;
-	r8 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r8) : r8;
-	r9 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r9) : r9;
-	r10 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r10) : r10;
-	r11 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r11) : r11;
-	r12 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r12) : r12;
-	r13 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r13) : r13;
-	r14 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r14) : r14;
-	r15 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r15) : r15;
-	r16 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r16) : r16;
-	r17 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r17) : r17;
-	r18 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r18) : r18;
-	r19 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r19) : r19;
-	r20 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r20) : r20;
-	r21 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r21) : r21;
-	r22 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r22) : r22;
-	r23 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r23) : r23;
-	r24 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r24) : r24;
-	r25 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r25) : r25;
-	r26 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r26) : r26;
-	r27 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r27) : r27;
-	r28 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r28) : r28;
-	r29 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r29) : r29;
-	r30 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r30) : r30;
-	r31 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r31) : r31;
-	r32 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r32) : r32;
+	r1 = (storeenable == 1) ? ((storesel == 0) ? storedata : r1) : r1;
+	r2 = (storeenable == 1) ? ((storesel == 1) ? storedata : r2) : r2;
+	r3 = (storeenable == 1) ? ((storesel == 2) ? storedata : r3) : r3;
+	r4 = (storeenable == 1) ? ((storesel == 3) ? storedata : r4) : r4;
+	r5 = (storeenable == 1) ? ((storesel == 4) ? storedata : r5) : r5;
+	r6 = (storeenable == 1) ? ((storesel == 5) ? storedata : r6) : r6;
+	r7 = (storeenable == 1) ? ((storesel == 6) ? storedata : r7) : r7;
+	r8 = (storeenable == 1) ? ((storesel == 7) ? storedata : r8) : r8;
+	r9 = (storeenable == 1) ? ((storesel == 8) ? storedata : r9) : r9;
+	r10 = (storeenable == 1) ? ((storesel == 9) ? storedata : r10) : r10;
+	r11 = (storeenable == 1) ? ((storesel == 10) ? storedata : r11) : r11;
+	r12 = (storeenable == 1) ? ((storesel == 11) ? storedata : r12) : r12;
+	r13 = (storeenable == 1) ? ((storesel == 12) ? storedata : r13) : r13;
+	r14 = (storeenable == 1) ? ((storesel == 13) ? storedata : r14) : r14;
+	r15 = (storeenable == 1) ? ((storesel == 14) ? storedata : r15) : r15;
+	r16 = (storeenable == 1) ? ((storesel == 15) ? storedata : r16) : r16;
+	r17 = (storeenable == 1) ? ((storesel == 16) ? storedata : r17) : r17;
+	r18 = (storeenable == 1) ? ((storesel == 17) ? storedata : r18) : r18;
+	r19 = (storeenable == 1) ? ((storesel == 18) ? storedata : r19) : r19;
+	r20 = (storeenable == 1) ? ((storesel == 19) ? storedata : r20) : r20;
+	r21 = (storeenable == 1) ? ((storesel == 20) ? storedata : r21) : r21;
+	r22 = (storeenable == 1) ? ((storesel == 21) ? storedata : r22) : r22;
+	r23 = (storeenable == 1) ? ((storesel == 22) ? storedata : r23) : r23;
+	r24 = (storeenable == 1) ? ((storesel == 23) ? storedata : r24) : r24;
+	r25 = (storeenable == 1) ? ((storesel == 24) ? storedata : r25) : r25;
+	r26 = (storeenable == 1) ? ((storesel == 25) ? storedata : r26) : r26;
+	r27 = (storeenable == 1) ? ((storesel == 26) ? storedata : r27) : r27;
+	r28 = (storeenable == 1) ? ((storesel == 27) ? storedata : r28) : r28;
+	r29 = (storeenable == 1) ? ((storesel == 28) ? storedata : r29) : r29;
+	r30 = (storeenable == 1) ? ((storesel == 29) ? storedata : r30) : r30;
+	r31 = (storeenable == 1) ? ((storesel == 30) ? storedata : r31) : r31;
+	r32 = (storeenable == 1) ? ((storesel == 31) ? storedata : r32) : r32;
+
+	o1 = r1;
+	o2 = r2;
+	o3 = r3;
+	o4 = r4;
+	o5 = r5;
+	o6 = r6;
+	o7 = r7;
+	o8 = r8;
+	o9 = r9;
+	o10 = r10;
+	o11 = r11;
+	o12 = r12;
+	o13 = r13;
+	o14 = r14;
+	o15 = r15;
+	o16 = r16;
+	o17 = r17;
+	o18 = r18;
+	o19 = r19;
+	o20 = r20;
+	o21 = r21;
+	o22 = r22;
+	o23 = r23;
+	o24 = r24;
+	o25 = r25;
+	o26 = r26;
+	o27 = r27;
+	o28 = r28;
+	o29 = r29;
+	o30 = r30;
+	o31 = r31;
+	o32 = r32;	
 }
 
 }
@@ -246,7 +278,7 @@ dp adder2(
 	in b1 : tc(32);
 	in b2 : tc(32);
 	out a : tc(32);
-	out b : tc(32	
+	out b : tc(32)	
 ){
 always{
 	a = a1+a2;
@@ -263,3 +295,39 @@ always{
 	a = a1+a2;
 }
 }
+
+dp shift(
+	in a : tc(32);
+	out b : tc(32)
+){
+always{
+	b = a>>6;
+}
+}
+
+dp controller (
+	in S_dataoutrdy : ns(1);
+	in S_cmdout : ns(32);
+	in result : tc(32);
+	out S_datain : tc(32);
+	out S_datainrdy : ns (1);
+	out storeenable : ns(1);
+	out storedata : tc(28);
+	out storesel : ns(5);
+)
+	reg rdyreg : ns(1);
+	reg selectreg : ns(5);
+{
+always{ 
+	storeenable = S_dataoutrdy;
+	rdyreg = S_dataoutrdy;
+	storedata = S_cmdout[0:27];	
+	S_datain = result;
+	S_datainrdy = rdyreg;
+	selectreg = S_dataoutrdy+selectreg;
+	storesel = selectreg;
+}	
+}
+
+
+
