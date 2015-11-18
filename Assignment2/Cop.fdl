@@ -1,5 +1,5 @@
 dp register(
-	in storeenaable : ns(1);	
+	in storeenable : ns(1);	
 	in storesel : ns(5);
 	in storedata : tc(32);
 	out o1 : tc(32);
@@ -296,12 +296,12 @@ always{
 }
 }
 
-dp shift(
+dp div(
 	in a : tc(32);
 	out b : tc(32)
 ){
 always{
-	b = a>>6;
+	b = a>>5;
 }
 }
 
@@ -313,11 +313,11 @@ dp controller (
 	out S_datainrdy : ns (1);
 	out storeenable : ns(1);
 	out storedata : tc(28);
-	out storesel : ns(5);
+	out storesel : ns(5)
 )
+{
 	reg rdyreg : ns(1);
 	reg selectreg : ns(5);
-{
 always{ 
 	storeenable = S_dataoutrdy;
 	rdyreg = S_dataoutrdy;
@@ -328,6 +328,94 @@ always{
 	storesel = selectreg;
 }	
 }
+
+dp cop( in busrdy : ns(1);
+	in buscmd : ns(32);
+	out databus : tc(32);
+	out databusrdy : ns(1)
+)
+{
+//Adder signals.
+	sig a161, a162, a163, a164, a165, a166, a167, a168,a169,a1610,a1611,a1612,a1613,a1614,a1615,a1616,a1617,a1618,a1619,a1620,a1621,a1622,a1623,a1624,a1625,a1626,a1627,a1628,a1629,a1630,a1631,a1632 : tc(32);
+sig a81, a82, a83, a84, a85, a86, a87, a88, a89, a810, a811, a812, a813, a814, a815, a816 : tc(32);
+sig a41,a42,a43,a44,a45,a46,a47,a48 : tc(32);
+sig a21,a22,a23,a24 : tc(32);
+sig a1,a2 : tc(32);
+//Adder signals over
+sig divin, divout : tc(32);
+
+//register signals
+sig storeenable : ns(1);
+sig storesel : ns(5);
+sig storedata : tc(32);
+
+//Controller signals
+sig S_dataoutrdy : ns(1);
+sig S_cmdout : ns(32);
+sig result : tc(32);
+sig S_datain : tc(32);
+sig S_datainrdy : ns(1);
+
+use controller(S_dataoutrdy,S_cmdout,divout,S_datain,S_datainrdy,storeenable,storedata,storesel);
+
+use register(storeenable,storesel,storedata,a161, a162, a163, a164, a165, a166, a167, a168,a169,a1610,a1611,a1612,a1613,a1614,a1615,a1616,a1617,a1618,a1619,a1620,a1621,a1622,a1623,a1624,a1625,a1626,a1627,a1628,a1629,a1630,a1631,a1632);
+
+use adder16(a161, a162, a163, a164, a165, a166, a167, a168,a169,a1610,a1611,a1612,a1613,a1614,a1615,a1616,a1617,a1618,a1619,a1620,a1621,a1622,a1623,a1624,a1625,a1626,a1627,a1628,a1629,a1630,a1631,a1632,a81, 
+a82, a83, a84, a85, a86, a87, a88, a89, a810, a811, a812, a813, a814, a815, a816);
+
+use adder8(a81, a82, a83, a84, a85, a86, a87, a88, a89, a810, a811, a812, a813, a814, a815, a816,a41,a42,a43,a44,a45,a46,a47,a48);
+
+use adder4(a41,a42,a43,a44,a45,a46,a47,a48,a21,a22,a23,a24);
+
+use adder2(a21,a22,a23,a24,a1,a2);
+
+use adder(a1,a2,divin);
+
+use div(divin,divout);
+
+
+always{ 
+	S_dataoutrdy = busrdy;
+	S_cmdout = buscmd;
+	databus = S_datain;
+	databusrdy = S_datainrdy; 
+}
+}
+
+dp testcop(out busrdy : ns(1);
+	out buscmd : ns(32);
+	in databus : tc(32);
+	in databusrdy : ns(1)
+){
+always{
+ 	$display($dec, "Cycle:", $cycle, " S_dataoutrdy: ", busrdy, " S_cmdout: ", buscmd, " S_datain: ", databus, " S_datainrdy: ", databusrdy);
+	}
+
+sfg test_0 {buscmd = 32; busrdy = 1;}
+sfg test_1 {buscmd = 0; busrdy = 0; }
+sfg test_2 {buscmd = 32; busrdy = 1;}
+sfg test_3 {buscmd = 0; busrdy = 0; }
+sfg test_4 {buscmd = 0; busrdy = 0; }
+
+}
+
+fsm f_testbench(testcop)
+{
+initial s0; // begin with state s0
+state s1, s2, s3, s4;
+@s0 (test_0) -> s1; // run test_0 and go to s1
+@s1 (test_1) -> s2; // run test_1 and go to s2
+@s2 (test_2) -> s3; // run test_2 and go to s3
+@s3 (test_3) -> s4; // run test_3 and go to s4
+@s4 (test_4) -> s0; // run test_4 and go to s0
+
+
+}
+system S {
+	cop(busrdy,buscmd,databus,databusrdy);
+	testcop(busrdy,buscmd,databus,databusrdy);
+	}
+
 
 
 
