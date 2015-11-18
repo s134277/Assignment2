@@ -1,0 +1,265 @@
+dp register(
+	in storeenaable : ns(1);	
+	in storesel : ns(5);
+	in storedata : tc(32);
+	out flush : tc(32);
+	out o1 : tc(32);
+	out o2 : tc(32);
+	out o3 : tc(32);
+	out o4 : tc(32);
+	out o5 : tc(32);
+	out o6 : tc(32);
+	out o7 : tc(32);
+	out o8 : tc(32);
+	out o9 : tc(32);
+	out o10 : tc(32);
+	out o11 : tc(32);
+	out o12 : tc(32);
+	out o13 : tc(32);
+	out o14 : tc(32);
+	out o15 : tc(32);
+	out o16 : tc(32);
+	out o17 : tc(32);
+	out o18 : tc(32);
+	out o19 : tc(32);
+	out o20 : tc(32);
+	out o21 : tc(32);
+	out o22 : tc(32);
+	out o23 : tc(32);
+	out o24 : tc(32);
+	out o25 : tc(32);
+	out o26 : tc(32);
+	out o27 : tc(32);
+	out o28 : tc(32);
+	out o29 : tc(32);
+	out o30 : tc(32);
+	out o31 : tc(32);
+	out o32 : tc(32)
+
+)
+{
+reg r1 : tc(32);
+reg r2 : tc(32);
+reg r3 : tc(32);
+reg r4 : tc(32);
+reg r5 : tc(32);
+reg r6 : tc(32);
+reg r7 : tc(32);
+reg r8 : tc(32);
+reg r9 : tc(32);
+reg r10 : tc(32);
+reg r11 : tc(32);
+reg r12 : tc(32);
+reg r13 : tc(32);
+reg r14 : tc(32);
+reg r15 : tc(32);
+reg r16 : tc(32);
+reg r17 : tc(32);
+reg r18 : tc(32);
+reg r19 : tc(32);
+reg r20 : tc(32);
+reg r21 : tc(32);
+reg r22 : tc(32);
+reg r23 : tc(32);
+reg r24 : tc(32);
+reg r25 : tc(32);
+reg r26 : tc(32);
+reg r27 : tc(32);
+reg r28 : tc(32);
+reg r29 : tc(32);
+reg r30 : tc(32);
+reg r31 : tc(32);
+reg r32 : tc(32);
+
+always{
+	r1 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r1) : r1;
+	r2 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r2) : r2;
+	r3 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r3) : r3;
+	r4 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r4) : r4;
+	r5 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r5) : r5;
+	r6 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r6) : r6;
+	r7 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r7) : r7;
+	r8 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r8) : r8;
+	r9 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r9) : r9;
+	r10 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r10) : r10;
+	r11 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r11) : r11;
+	r12 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r12) : r12;
+	r13 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r13) : r13;
+	r14 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r14) : r14;
+	r15 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r15) : r15;
+	r16 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r16) : r16;
+	r17 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r17) : r17;
+	r18 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r18) : r18;
+	r19 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r19) : r19;
+	r20 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r20) : r20;
+	r21 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r21) : r21;
+	r22 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r22) : r22;
+	r23 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r23) : r23;
+	r24 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r24) : r24;
+	r25 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r25) : r25;
+	r26 = (storeenable == 1) ? ((storesel == 0b00101) ? storedata : r26) : r26;
+	r27 = (storeenable == 1) ? ((storesel == 0b00110) ? storedata : r27) : r27;
+	r28 = (storeenable == 1) ? ((storesel == 0b00111) ? storedata : r28) : r28;
+	r29 = (storeenable == 1) ? ((storesel == 0b00001) ? storedata : r29) : r29;
+	r30 = (storeenable == 1) ? ((storesel == 0b00010) ? storedata : r30) : r30;
+	r31 = (storeenable == 1) ? ((storesel == 0b00011) ? storedata : r31) : r31;
+	r32 = (storeenable == 1) ? ((storesel == 0b00100) ? storedata : r32) : r32;
+}
+
+}
+
+dp adder16(
+	in a1 : tc(32);
+	in a2 : tc(32);
+	in b1 : tc(32);
+	in b2 : tc(32);
+	in c1 : tc(32);
+	in c2 : tc(32);
+	in d1 : tc(32);
+	in d2 : tc(32);
+	in e1 : tc(32);
+	in e2 : tc(32);
+	in f1 : tc(32);
+	in f2 : tc(32);
+	in g1 : tc(32);
+	in g2 : tc(32);
+	in h1 : tc(32);
+	in h2 : tc(32);
+	in i1 : tc(32);
+	in i2 : tc(32);
+	in j1 : tc(32);
+	in j2 : tc(32);
+	in k1 : tc(32);
+	in k2 : tc(32);
+	in l1 : tc(32);
+	in l2 : tc(32);
+	in m1 : tc(32);
+	in m2 : tc(32);
+	in n1 : tc(32);
+	in n2 : tc(32);
+	in o1 : tc(32);
+	in o2 : tc(32);
+	in p1 : tc(32);
+	in p2 : tc(32);
+	out a : tc(32);
+	out b : tc(32);
+	out c : tc(32);
+	out d : tc(32);
+	out e : tc(32);
+	out f : tc(32);
+	out g : tc(32);
+	out h : tc(32);
+	out i : tc(32);
+	out j : tc(32);
+	out k : tc(32);
+	out l : tc(32);
+	out m : tc(32);
+	out n : tc(32);
+	out o : tc(32);
+	out p : tc(32)
+)
+{
+always{
+	a = a1+a2;
+	b = b1+b2;
+	c = c1+c2;
+	d = d1+d2;
+	e = e1+e2;
+	f = f1+f2;
+	g = g1+g2;
+	h = h1+h2;
+	i = i1+i2;
+	j = j1+j2;
+	k = k1+k2;
+	l = l1+l2;
+	m = m1+m2;
+	n = n1+n2;
+	o = o1+o2;
+	p = p1+p2;
+}
+}
+
+dp adder8 (
+	in a1 : tc(32);
+	in a2 : tc(32);
+	in b1 : tc(32);
+	in b2 : tc(32);
+	in c1 : tc(32);
+	in c2 : tc(32);
+	in d1 : tc(32);
+	in d2 : tc(32);
+	in e1 : tc(32);
+	in e2 : tc(32);
+	in f1 : tc(32);
+	in f2 : tc(32);
+	in g1 : tc(32);
+	in g2 : tc(32);
+	in h1 : tc(32);
+	in h2 : tc(32);
+	out a : tc(32);
+	out b : tc(32);
+	out c : tc(32);
+	out d : tc(32);
+	out e : tc(32);
+	out f : tc(32);
+	out g : tc(32);
+	out h : tc(32)		
+){
+
+always{
+	a = a1+a2;
+	b = b1+b2;
+	c = c1+c2;
+	d = d1+d2;
+	e = e1+e2;
+	f = f1+f2;
+	g = g1+g2;
+	h = h1+h2;
+}
+}
+
+dp adder4(
+	in a1 : tc(32);
+	in a2 : tc(32);
+	in b1 : tc(32);
+	in b2 : tc(32);
+	in c1 : tc(32);
+	in c2 : tc(32);
+	in d1 : tc(32);
+	in d2 : tc(32);
+	out a : tc(32);
+	out b : tc(32);
+	out c : tc(32);
+	out d : tc(32)
+){
+always{
+	a = a1+a2;
+	b = b1+b2;
+	c = c1+c2;
+	d = d1+d2;
+}
+}
+
+dp adder2(
+	in a1 : tc(32);
+	in a2 : tc(32);
+	in b1 : tc(32);
+	in b2 : tc(32);
+	out a : tc(32);
+	out b : tc(32	
+){
+always{
+	a = a1+a2;
+	b = b1+b2;	
+}
+}
+
+dp adder(
+	in a1 : tc(32);
+	in a2 : tc(32);
+	out a : tc(32)
+){
+always{
+	a = a1+a2;
+}
+}
